@@ -1,0 +1,44 @@
+<%inherit file="/homepage/templates/base.htm" />
+<%! from catalog import models as cmod %>
+
+<%block name="navbar_items">
+    <li class = ${'active' if request.dmp.page == 'index' else ''}><a href="/homepage/index/">Home</a></li>
+    <li class = ${'active' if request.dmp.page == 'catalog' else ''}><a href="/catalog/">Catalog</a></li>
+    <li class = ${'active' if request.dmp.page == 'product' else ''}><a href="/manager/product/">Products</a></li>
+</%block>
+
+<%block name="left">
+    <ul id="mySidenav" class="sidenav">
+        <a href="/catalog/index"><li class="${'activeSide' if categoryID == 0 else ''}">All Products</li></a>
+        % for cat in cmod.Category.objects.order_by('name'):
+            <a href="/catalog/index/${ cat.id }"><li class="${'activeSide' if categoryID == cat.id else ''}">${ cat.name }</li></a>
+        % endfor
+    </ul>
+</%block>
+
+<%block name="right">
+
+    <h4 id="last_five_title">Recently Viewed:</h4>
+<ol id="last_five_list">
+    <!--If the current page is Catalog, then show the recently viewed items, 1 through 6.-->
+    %if request.dmp.page == 'index':
+        %for product in request.last_five[0:5]:
+        <li>
+            <a href="/catalog/detail/${product.id}/">
+                <div><img class="product_image" src="${product.image_url()}"/></div>
+                <div class="product_title">${product.name}</div>
+            </a>
+        </li>
+        %endfor
+    %else:
+        %for product in request.last_five[1:6]:
+        <li>
+            <a href="/catalog/detail/${product.id}/">
+                <div><img class="product_image" src="${product.image_url()}"/></div>
+                <div class="product_title">${product.name}</div>
+            </a>
+        </li>
+        %endfor
+    %endif
+</ol>
+</%block>
