@@ -1,0 +1,35 @@
+<%inherit file="app_base.htm" />
+
+<%block name="middle">
+    <div class="text-center">
+        <h2>${ name }</h2>
+    </div>
+    <div id="prodPage">
+        <div id="prodPics">
+            <ul>
+                <%iCount = 0 %>
+                % for i in product.image_urls():
+                <%iCount = iCount + 1 %>
+                    <li>
+                        <img class="images" src="${ i }" alt="additional image">
+                    </li>
+                % endfor
+            </ul>
+        </div>
+        <div>
+            <img id="prodImg" src="${ image }" alt="main product image">
+        </div>
+        <div id="desc">
+            ${ description }
+        </div>
+    </div>
+    <br>
+    <div id="buyBtn">
+        %if hasattr(product, 'quantity'):
+            <strong>Quantity:</strong>
+            <input id="quantity" type="text" class="form-control" value="1">
+        %endif
+        <br>
+        <a id="bbtn" class="btn btn-warning" href="#" role="button" data-message="the buy now button" tabindex="0">Buy</a>
+    </div>
+</%block>
