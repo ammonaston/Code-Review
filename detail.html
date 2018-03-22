@@ -1,0 +1,35 @@
+<%inherit file="app_base.htm" />
+
+<%block name="aboveColumns">
+    <div class="above-columns">
+        <h1>${product.name | h}</h1>
+    </div>
+</%block>
+
+
+<%block name ="middle">
+    <main class = "row" />
+        <div class="col-md-3">
+            <%
+                images = product.image_urls()
+            %>
+            <ul class="thumbnail_list">
+                %for items in images:
+                    <li><img alt="Thumbnail picture of ${product.name | h}" class="thumbnails" src="${ items }" /></li>
+                %endfor
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <img class="main_img" alt="Picture of ${product.name | h}" src="${product.image_url()}" />
+            <div class="description">
+                ${product.description}
+            </div>
+            <div class="quantity_buy">
+                %if product.TITLE == 'Bulk':
+                    Quantity: <input type="text" name="qty" class="form-control" id="inputQty" value=1>
+                %endif
+                &nbsp;
+                <a class="btn btn-orange btn-lrg">Buy Now</a>
+            </div>
+        </div>
+</%block>
