@@ -1,0 +1,55 @@
+<%inherit file="/fomo_app/templates/base.htm" />
+
+<%block name="catalog">
+
+    <div class="content row">
+
+        <!-- column -->
+        <div id="sidebar" class="col-2">
+            <ul class="text-center">
+                <a href="/catalog/index"><li class="sidebar ${'activeSide' if categoryId == 0 else ''}">All Products</li></a>
+                <%! from catalog import models as cmod %>
+                <% categories = cmod.Category.objects.all() %>
+                % for cat in categories:
+                    <a href="/catalog/index/${ cat.id }"><li class="sidebar ${'activeSide' if categoryId == cat.id else ''}">${ cat.name }</li></a>
+                % endfor
+            </ul>
+        </div>
+
+        <!-- column -->
+        <%block name="products"></%block>
+        <%block name="detail"></%block>
+
+        <!-- column -->
+        <div class="col-2 text-center">
+            <h4>Recently Viewed:</h4>
+
+            <ol id="recentlyViewed">
+            % for index, prod in enumerate(request.last_five):
+                % if request.dmp.page == 'detail':
+                    % if index != 0:
+                        <li class="recentlyViewedPics"><a href="/catalog/detail/${ prod.id }">
+                            <img src="${ prod.image_url() }" alt="${ prod.name }">
+                            <p>${ prod.name }</p>
+                        </a></li>
+                    % endif
+                % else:
+                    % if len(request.last_five) != 6:
+                        <li class="recentlyViewedPics"><a href="/catalog/detail/${ prod.id }">
+                            <img src="${ prod.image_url() }" alt="${ prod.name }">
+                            <p>${ prod.name }</p>
+                        </a></li>
+                    % elif index != (len(request.last_five) - 1):
+                        <li class="recentlyViewedPics"><a href="/catalog/detail/${ prod.id }">
+                            <img src="${ prod.image_url() }" alt="${ prod.name }">
+                            <p>${ prod.name }</p>
+                        </a></li>
+                    % endif
+                % endif
+            % endfor
+            </ol>
+
+        </div>
+
+    </div>
+</%block>
