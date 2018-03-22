@@ -1,0 +1,32 @@
+<%inherit file="app_base.htm" />
+
+
+<%block name="content">
+
+<h1 class="text-center">${ product.name | h }</h1>
+<div class="product_detail_flexbox">
+    <ul class="product_detail_list">
+        <%
+        images = product.image_urls()
+        %>
+        %for img in images:
+        <li><a href="#"><img class="product_detail_images" src="${ img }" alt="${ product.name }"></a></li>
+        %endfor
+    </ul>
+    <div>
+        <div class="product_detail_image">
+            <img id="main" src="${ product.image_url() }" alt="${ product.name }">
+        </div>
+        ${ product.description }
+        <div>
+            <p>
+                %if product.__class__.__name__ == 'BulkProduct':
+                Quantity: <input type="text" name="quantity" value="1" size="3">
+                %endif
+                <a href="#" type="button" class="btn btn-primary btn-md">BUY</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+</%block>
