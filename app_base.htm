@@ -1,0 +1,46 @@
+<%inherit file="/homepage/templates/base.htm" />
+<%! from catalog import models as cmod %>
+
+<%block name="navbar_items">
+    <li class = ${'active' if request.dmp.page == 'index' else ''}><a href="/homepage/index/">Home</a></li>
+    <li class = ${'active' if request.dmp.page == 'about' else ''}><a href="/homepage/about/">About</a></li>
+    <li class = ${'active' if request.dmp.page == 'contact' else ''}><a href="/homepage/contact/">Contact</a></li>
+    <li class = ${'active' if request.dmp.page == 'FAQ' else ''}><a href="/homepage/FAQ/">FAQ</a></li>
+    <li class = ${'active' if request.dmp.page == 'terms' else ''}><a href="/homepage/terms/">Terms</a></li>
+</%block>
+
+<%block name ="left">
+    <div id="SideNav">
+        <ul class="nav nav-pills nav-stacked">
+            <li class="${'active' if category_name == 'All Products' else ''}" role="presentation"><a href="/catalog/index/0">All Products</a></li>
+            %for item in cmod.Category.objects.order_by('name'):
+                <li class="${'active' if category_name == item.name else ''}" role="presentation"><a href="/catalog/index/${item.id}">${item.name}</a></li>
+            %endfor
+        </ul>
+    </div>
+</%block>
+
+<%block name ="right">
+    <h2 id="last_five_title">Recently Viewed:</h2>
+    <ol id="last_five_list">
+        %if request.dmp.page == 'index':
+            %for product in request.last_five[0:5]:
+                <li>
+                    <a href="/catalog/detail/${ product.id }/">
+                        <div><img class="rv_product_image" src="${product.image_url()}" /></div>
+                        <div class="rv_product_title">${ product.name }</div>
+                    </a>
+                </li>
+            %endfor
+        %else:
+            %for product in request.last_five[1:6]:
+                <li>
+                    <a href="/catalog/detail/${ product.id }/">
+                        <div><img class="rv_product_image" src="${product.image_url()}" /></div>
+                        <div class="rv_product_title">${ product.name }</div>
+                    </a>
+                </li>
+            %endfor
+        %endif
+    </ol>
+</%block>
